@@ -13,7 +13,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.Serializer):
-    id = serializers.UUIDField(required=False, )
+    id = serializers.UUIDField(required=False)
     name = serializers.CharField(required=False)
     age = serializers.IntegerField(required=False)
 

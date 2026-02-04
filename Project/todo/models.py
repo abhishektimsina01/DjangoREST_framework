@@ -6,3 +6,7 @@ class Todos(models.Model):
     id = models.UUIDField(primary_key= True, default= uuid.uuid4)
     todo = models.CharField(max_length=20)
     completed = models.BooleanField(default=False)
+
+class User(models.Model):
+    name = models.CharField(max_length=25)
+    age = models.IntegerField()

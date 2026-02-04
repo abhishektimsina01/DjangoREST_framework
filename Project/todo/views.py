@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import TodoSerializer
-from .models import Todos
+from .serializers import TodoSerializer, UserSerializer
+from .models import Todos, User
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 
@@ -50,4 +50,37 @@ def updateTodo(request, id):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
+    return Response(serializer.errors)
+
+
+@api_view(['POST'])
+def addUsers(request):
+    print(request.data)
+    serializer = UserSerializer(data = request.data)
+    if serializer.is_valid():   
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors)
+
+
+@api_view(['GET'])
+def getAllUsers(request):
+    try:
+        users = User.objects.all()
+    except:
+        return Response({'error' : 'No user found'})
+    serializer = UserSerializer(users, many = True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def updateUser(request, id):
+    data  = request.data
+    try:
+        user = User.objects.get(id = id)
+    except:
+        return Response({'error' : 'User not found'})
+    serializer = UserSerializer(instance = data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.validated_data)
     return Response(serializer.errors)

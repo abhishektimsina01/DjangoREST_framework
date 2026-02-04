@@ -20,7 +20,7 @@ def deleteAll(request, id):
         res = Todos.objects.get(id = id)
     except:
         return Response({'error' : 'issue'})
-    Todos.objects.get(id = id).delete()
+    Todos.objects.all().delete()
     return Response({"message" : 'removed the todo list'})
 
 
@@ -72,6 +72,7 @@ def getAllUsers(request):
     serializer = UserSerializer(users, many = True)
     return Response(serializer.data)
 
+
 @api_view(['PUT'])
 def updateUser(request, id):
     data  = request.data
@@ -79,7 +80,7 @@ def updateUser(request, id):
         user = User.objects.get(id = id)
     except:
         return Response({'error' : 'User not found'})
-    serializer = UserSerializer(instance = data)
+    serializer = UserSerializer(instance = user, data = data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.validated_data)

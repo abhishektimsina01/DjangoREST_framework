@@ -4,7 +4,8 @@ from .models import Todos, User
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model=Todos
-        fields = "__all__"
+        fields = ['todo', 'completed', 'id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
     
     def create(self, validated_data):
         validated_data['todo'] = validated_data['todo'].upper()
@@ -12,8 +13,9 @@ class TodoSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    age = serializers.IntegerField()
+    id = serializers.UUIDField(required=False, )
+    name = serializers.CharField(required=False)
+    age = serializers.IntegerField(required=False)
 
     def validate_age(self, data):
         if data < 18:

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import getAllTodos, deleteAll, add_todo, updateTodo, addUsers, getAllUsers
+from .views import getAllTodos, deleteAll, add_todo, updateTodo, addUsers, getAllUsers, updateUser
 
 urlpatterns = [
     path("getAll/", getAllTodos),
@@ -7,5 +7,6 @@ urlpatterns = [
     path('addTodo', add_todo),
     path('updateTodo/<uuid:id>', updateTodo),
     path('addUser', addUsers),
-    path("getAllUsers/", getAllUsers)
+    path("getAllUsers/", getAllUsers),
+    path('updateUser/<uuid:id>', updateUser)
 ]

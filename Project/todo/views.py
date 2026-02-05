@@ -3,7 +3,7 @@ from rest_framework import status
 from .serializers import TodoSerializer, UserSerializer
 from .models import Todos, User
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 from rest_framework import mixins, viewsets
 from rest_framework.generics import GenericAPIView, ListAPIView
@@ -215,10 +215,17 @@ class TodoViewSet(viewsets.ViewSet):
         serializer = TodoSerializer(data = data, instance = todo ,partial = True)
         if serializer.is_valid():
             serializer.save()
-            return Response(data= serializer.validated_data)
+            return Response(data= serializer.data)
         else:
             return Response(data = serializer.errors)
+
 
     def destroy(self, response, pk):
         # its the same, i am tired doing the same thing
         pass
+
+    @action(detail=False, methods=['GET'])
+    def completed(self, request):
+        todo = Todos.objects.filter(completed = True)
+        serializer = TodoSerializer(todo, many = True)
+        return Response(data=serializer.data)

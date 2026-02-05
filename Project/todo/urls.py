@@ -1,10 +1,11 @@
 from django.urls import path, include
 from .views import getAllTodos, deleteAll, add_todo, updateTodo, addUsers, getAllUsers, updateUser
-from .views import TodoClass, TodoGenericClass, TodoPreBuiltGenericClass, TodoViewSet
+from .views import TodoClass, TodoGenericClass, TodoPreBuiltGenericClass, TodoViewSet, TodoModelViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('data', TodoViewSet, basename='data')
+router.register('todo', TodoModelViewSet, basename="todo")
 
 
 urlpatterns = [
@@ -29,5 +30,5 @@ urlpatterns = [
 
     path("readTodos/", TodoPreBuiltGenericClass.as_view()),
 
-    path("", include(router.urls))
+    path("", include(router.urls)),
 ]

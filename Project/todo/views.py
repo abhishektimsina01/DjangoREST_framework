@@ -164,7 +164,6 @@ class TodoPreBuiltGenericClass(ListAPIView):
     queryset = Todos.objects.all()
     serializer_class = TodoSerializer
 
-
 # **********************************************************************************************************************
 
 # Viewsets and ModelViewSet
@@ -228,4 +227,19 @@ class TodoViewSet(viewsets.ViewSet):
     def completed(self, request):
         todo = Todos.objects.filter(completed = True)
         serializer = TodoSerializer(todo, many = True)
+        return Response(data=serializer.data)
+
+
+# **********************************************************************************************************************
+
+# ModelViewSet
+
+class TodoModelViewSet(viewsets.ModelViewSet):
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer
+
+    @action(detail=False, methods=['GET'])
+    def completed(self, request):
+        todo = Todos.objects.filter(completed = True)
+        serializer = self.get_serializer(todo, many = True)
         return Response(data=serializer.data)

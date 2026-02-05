@@ -5,7 +5,7 @@ from .models import Todos, User
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework import mixins
+from rest_framework import mixins, viewsets
 from rest_framework.generics import GenericAPIView, ListAPIView
 
 
@@ -146,8 +146,8 @@ class TodoGenericClass(GenericAPIView, mixins.ListModelMixin, mixins.RetrieveMod
     def get(self, request):
         return self.list(request)
     
-    def put(self, request):
-        return self.update(request)
+    def put(self, request, pk):
+        return self.update(request, pk)
     
     def post(self, request):
         return self.create(request)
@@ -163,3 +163,62 @@ class TodoGenericClass(GenericAPIView, mixins.ListModelMixin, mixins.RetrieveMod
 class TodoPreBuiltGenericClass(ListAPIView):
     queryset = Todos.objects.all()
     serializer_class = TodoSerializer
+
+
+# **********************************************************************************************************************
+
+# Viewsets and ModelViewSet
+
+class TodoViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        todo = Todos.objects.all()
+        serializer = TodoSerializer(todo, many = True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
+
+    def create(self, request):
+        # its the same, i am tired doing the same thing
+        pass
+
+    def retrieve(self, request, pk):
+        try:
+            todo = Todos.objects.get(id = pk)
+        except Todos.DoesNotExist:
+            return Response({'error' : 'DoesnotExist'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = TodoSerializer(data = todo)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data= serializer.validated_data)
+        else:
+            return Response(data = serializer.errors)
+        
+    def update(self, request, pk):
+        data = request.data
+        try:
+            todo = Todos.objects.get(id = pk)
+        except Todos.DoesNotExist:
+            return Response({'error' : 'DoesNotExist'})
+        serializer = TodoSerializer(data = data, instance = todo)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data= serializer.validated_data)
+        else:
+            return Response(data = serializer.errors)
+
+
+    def partial_update(self, request, pk):
+        data = request.data
+        try:
+            todo = Todos.objects.get(id = pk)
+        except Todos.DoesNotExist:
+            return Response({'error' : 'DoesNotExist'})
+        serializer = TodoSerializer(data = data, instance = todo ,partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data= serializer.validated_data)
+        else:
+            return Response(data = serializer.errors)
+
+    def destroy(self, response, pk):
+        # its the same, i am tired doing the same thing
+        pass

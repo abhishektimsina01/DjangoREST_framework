@@ -70,10 +70,10 @@ def addUsers(request):
 @api_view(['GET'])
 def getAllUsers(request):
     try:
-        users = User.objects.all()
+        users = User.objects.first()
     except:
         return Response({'error' : 'No user found'})
-    serializer = UserSerializer(users, many = True)
+    serializer = UserSerializer(users,)
     return Response(serializer.data)
 
 
@@ -97,12 +97,13 @@ def updateUser(request, id):
 # class based view
 class TodoClass(APIView):
     
-    def get(request):
+    def get(self, request, format = None):
         todos = Todos.objects.all()
+        print(todos)
         serializer = TodoSerializer(todos, many = True)
-        return Response(data = serializer, status= status.HTTP_200_OK)
+        return Response(data = serializer.data, status= status.HTTP_200_OK)
 
-    def post(request):
+    def post(self, request):
         data = request.data
         serializer = TodoSerializer(data = data)
         if serializer.is_valid():
@@ -110,20 +111,21 @@ class TodoClass(APIView):
             return Response(data = serializer.data, status=status.HTTP_200_OK)
         return Response(data = serializer.errors)
 
-    def delete(request, id):
+    def delete(self, request, id):
         try:
             todo = Todos.objects.get(id = id).delete()
         except Todos.DoesNotExist:
             return Response({'error' : "doesnot exist"}, status= status.HTTP_404_NOT_FOUND)
         return Response({'message' : "todo deleted"}, status=status.HTTP_200_OK)
     
-    def put(request, id):
+    def put(self, request, id):
         data = request.data
         try:
             todo = Todos.objects.get(id = id)
         except Todos.DoesNotExist:
-            return Response({'error' : 'Doesnot exist'})
+            return Response({'error' : "DoesNotExist"})
         serializer = TodoSerializer(instance = todo, data = data, partial = True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors)

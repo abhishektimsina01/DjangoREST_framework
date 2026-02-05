@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import getAllTodos, deleteAll, add_todo, updateTodo, addUsers, getAllUsers, updateUser
-from .views import TodoClass
+from .views import TodoClass, TodoGenericClass, TodoPreBuiltGenericClass
 
 urlpatterns = [
     path("getAll/", getAllTodos),
@@ -13,5 +13,10 @@ urlpatterns = [
     path('read/', TodoClass.as_view()),
     path('post', TodoClass.as_view()),
     path('delete/<uuid:id>', TodoClass.as_view()),
-    path('update/<uuid:id>', TodoClass.as_view())
+    path('update/<uuid:id>', TodoClass.as_view()),
+    path('readTodo/', TodoGenericClass.as_view()),
+    path('postTodo', TodoGenericClass.as_view()),
+    path('deleteTodo/<uuid:pk>', TodoGenericClass.as_view()),
+    path('updateTodo/<uuid:pk>', TodoGenericClass.as_view()),
+    path("readTodos/", TodoPreBuiltGenericClass.as_view())  
 ]

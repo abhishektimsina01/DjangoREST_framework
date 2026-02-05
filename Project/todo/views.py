@@ -5,6 +5,9 @@ from .models import Todos, User
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import mixins
+from rest_framework.generics import GenericAPIView, ListAPIView
+
 
 
 @api_view(['GET'])
@@ -129,3 +132,34 @@ class TodoClass(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+    
+
+# **********************************************************************************************************************
+
+# GenericAPIView ans mixins
+
+class TodoGenericClass(GenericAPIView, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer
+
+    def get(self, request):
+        return self.list(request)
+    
+    def put(self, request):
+        return self.update(request)
+    
+    def post(self, request):
+        return self.create(request)
+    
+    def delete(self, request, pk):
+        return self.destroy(request, pk)
+    
+
+# **********************************************************************************************************************
+
+# pre-built generic views
+
+class TodoPreBuiltGenericClass(ListAPIView):
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer

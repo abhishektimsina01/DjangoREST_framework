@@ -249,7 +249,11 @@ class TodoModelViewSet(viewsets.ModelViewSet):
         todo = self.get_queryset().filter(completed = True)
         serializer = self.get_serializer(todo, many = True)
         return Response(data=serializer.data)
-    
+
+
+# **********************************************************************************************************************
+
+# Authenticatioin and Permission
 
 class TodoAuthenticated(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]

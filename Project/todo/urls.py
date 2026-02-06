@@ -31,5 +31,7 @@ urlpatterns = [
 
     path("readTodos/", TodoPreBuiltGenericClass.as_view()),
 
+
+
     path("", include(router.urls)),
 ]

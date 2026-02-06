@@ -10,6 +10,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .models import Teachers
 
 
 @api_view(['GET'])
@@ -266,3 +267,15 @@ class TodoAuthenticated(viewsets.ModelViewSet):
         todos = self.get_queryset.filter(completed = True)
         serializer = self.get_serializer(todos, many = True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+
+
+
+# **********************************************************************************************************************
+
+# ORM relation (1:1, 1:M, M:M)
+
+@api_view(['GET'])
+def getTeacher(request):
+    pass
+    # teach = Teachers.objects.get()

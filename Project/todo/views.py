@@ -7,7 +7,9 @@ from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 from rest_framework import mixins, viewsets
 from rest_framework.generics import GenericAPIView, ListAPIView
-
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny
+from rest_framework.permissions import BasePermission
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 @api_view(['GET'])
@@ -170,6 +172,7 @@ class TodoPreBuiltGenericClass(ListAPIView):
 
 class TodoViewSet(viewsets.ViewSet):
 
+
     def list(self, request):
         print(self.basename)
         print(self.action)
@@ -237,11 +240,25 @@ class TodoViewSet(viewsets.ViewSet):
 # ModelViewSet
 
 class TodoModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = Todos.objects.all()
     serializer_class = TodoSerializer
 
     @action(detail=False, methods=['GET'])
     def completed(self, request):
-        todo = self.get_queryset.filter(completed = True)
+        todo = self.get_queryset().filter(completed = True)
         serializer = self.get_serializer(todo, many = True)
         return Response(data=serializer.data)
+    
+
+class TodoAuthenticated(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer
+
+    @action(detail=False, methods=['GET'])
+    def completed(self, request):
+        todos = self.get_queryset.filter(completed = True)
+        serializer = self.get_serializer(todos, many = True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

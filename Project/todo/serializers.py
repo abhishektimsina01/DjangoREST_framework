@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, CharField, Serializer
 from .models import Todos, User
 
-class TodoSerializer(serializers.ModelSerializer):
+class TodoSerializer(ModelSerializer):
     class Meta:
         model=Todos
         fields = ['todo', 'completed', 'id', 'created_at', 'updated_at']
@@ -12,7 +13,7 @@ class TodoSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(Serializer):
     id = serializers.UUIDField(required=False)
     name = serializers.CharField(required=False)
     age = serializers.IntegerField(required=False)
@@ -31,3 +32,5 @@ class UserSerializer(serializers.Serializer):
         instance.age = validated_data.get('age', instance.age)
         instance.save()    
         return instance
+
+

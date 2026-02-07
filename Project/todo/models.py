@@ -26,3 +26,11 @@ class Teachers(models.Model):
     name = models.CharField(max_length=20)
     course_id = models.OneToOneField(Courses, on_delete=models.CASCADE)
 
+class Author(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=20)
+
+class Book(models.Model):
+    id = models.UUIDField(primary_key=True, default= uuid.uuid4)
+    name = models.CharField(max_length=20)
+    author_id = models.ForeignKey(Author, on_delete=models.CASCADE)

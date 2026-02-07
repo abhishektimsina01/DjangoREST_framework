@@ -10,7 +10,7 @@ from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import Teachers
+from .models import Teachers, Courses
 
 
 @api_view(['GET'])
@@ -275,7 +275,11 @@ class TodoAuthenticated(viewsets.ModelViewSet):
 
 # ORM relation (1:1, 1:M, M:M)
 
-@api_view(['GET'])
-def getTeacher(request):
-    pass
-    # teach = Teachers.objects.get()
+class Relation(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        teacher = Teachers.objects.first()
+        print(teacher.name)
+        print(teacher.course_id)
+        course = Courses.objects.first()
+        return Response({'name' : teacher.name, 'course.name' : teacher.course_id.name})

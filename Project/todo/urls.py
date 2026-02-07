@@ -3,6 +3,7 @@ from .views import getAllTodos, deleteAll, add_todo, updateTodo, addUsers, getAl
 from .views import TodoClass, TodoGenericClass, TodoPreBuiltGenericClass, TodoViewSet, TodoModelViewSet, TodoAuthenticated
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenBlacklistView
+from .views import Relation
 
 router = DefaultRouter()
 router.register('data', TodoViewSet, basename='data')
@@ -31,7 +32,11 @@ urlpatterns = [
 
     path("readTodos/", TodoPreBuiltGenericClass.as_view()),
 
+    path("getTeacher/", Relation.as_view(), name="getTeachers"),
 
-
+    path('login/', TokenObtainPairView.as_view(), name="Login"),
+    path("refresh/", TokenRefreshView.as_view(), name="Refresh"),
+    path("verify/", TokenVerifyView.as_view(), name="Verify"),
+    
     path("", include(router.urls)),
 ]

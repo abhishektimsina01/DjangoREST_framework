@@ -22,11 +22,11 @@ def getAllTodos(request):
 
 
 @api_view(['DELETE'])
-def deleteAll(request, id):
+def deleteAll(request, id): 
     try:
         res = Todos.objects.get(id = id)
     except Todos.DoesNotExist:
-        return Response({'error' : 'issue'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error' : 'issue'}, status=status  .HTTP_404_NOT_FOUND)
     Todos.objects.all().delete()
     return Response({"message" : 'removed the todo list'}, status= status.HTTP_200_OK)
 

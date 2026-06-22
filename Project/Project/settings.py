@@ -63,7 +63,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-}
+}   
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

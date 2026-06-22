@@ -32,5 +32,3 @@ class UserSerializer(Serializer):
         instance.age = validated_data.get('age', instance.age)
         instance.save()    
         return instance
-
-

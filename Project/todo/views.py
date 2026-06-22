@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 from rest_framework import mixins, viewsets
-from rest_framework.generics import GenericAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -34,6 +34,7 @@ def deleteAll(request, id):
 @api_view(['POST'])
 def add_todo(request):
     print(request.POST)
+    print(request.data)
     serializer = TodoSerializer(data = request.data)
     if serializer.is_valid():
         print(serializer)
@@ -102,7 +103,7 @@ def updateUser(request, id):
 
 # class based view
 class TodoClass(APIView):
-    
+
     def get(self, request, format = None):
         todos = Todos.objects.all()
         print(todos)
@@ -113,10 +114,10 @@ class TodoClass(APIView):
         data = request.data
         serializer = TodoSerializer(data = data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save()   
             return Response(data = serializer.data, status=status.HTTP_200_OK)
         return Response(data = serializer.errors)
-
+    
     def delete(self, request, id):
         try:
             todo = Todos.objects.get(id = id).delete()
@@ -135,7 +136,6 @@ class TodoClass(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
-    
 
 # **********************************************************************************************************************
 
@@ -172,7 +172,6 @@ class TodoPreBuiltGenericClass(ListAPIView):
 # Viewsets and ModelViewSet
 
 class TodoViewSet(viewsets.ViewSet):
-
 
     def list(self, request):
         print(self.basename)
@@ -249,7 +248,7 @@ class TodoModelViewSet(viewsets.ModelViewSet):
     def completed(self, request):
         todo = self.get_queryset().filter(completed = True)
         serializer = self.get_serializer(todo, many = True)
-        return Response(data=serializer.data)
+        return Response(data=serializer.data)   
 
 
 # **********************************************************************************************************************
@@ -267,8 +266,6 @@ class TodoAuthenticated(viewsets.ModelViewSet):
         todos = self.get_queryset.filter(completed = True)
         serializer = self.get_serializer(todos, many = True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-    
-
 
 
 # **********************************************************************************************************************
